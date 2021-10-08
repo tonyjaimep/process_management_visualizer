@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from Process import Process
 
 BACKGROUND_COLOR = "#03000F"
 
@@ -11,19 +12,22 @@ BUTTON_BACKGROUND_MAP = [
 BUTTON_BACKGROUND = "#13101F"
 BUTTON_FOREGROUND = "#F0F0FF"
 
-class Process:
-
-    def __init__(self, delay):
-        self.delay = delay
-
+WINDOWS_TITLE     = "FCFS test"
+WINDOW_GEOMETRY  = "1100x600"
 
 class Application(tk.Tk):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.set_external_layout()
         self.create_widgets()
         self.init_styles()
         self.processes = []
+
+    def set_external_layout(self):
+        self.geometry(WINDOW_GEOMETRY)
+        self.title(WINDOWS_TITLE)
+        self.resizable(False, False)
 
     def init_styles(self):
         self["bg"] = BACKGROUND_COLOR
