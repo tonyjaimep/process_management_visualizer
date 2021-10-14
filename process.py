@@ -2,8 +2,8 @@ import time
 import random
 import string
 
-class Process:
 
+class Process:
     def __init__(self, time_to_complete, arrives_at=0, identifier=None):
         # 0.0 = none, 1.0 = complete
         self.time_to_complete = time_to_complete

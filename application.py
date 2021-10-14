@@ -16,6 +16,7 @@ class Application(tk.Tk):
     """
     Controls how processes are managed and displays them in a tkinter canvas
     """
+
     def __init__(self, processes=[], **kwargs):
         super().__init__(**kwargs)
         self.process_manager = FCFSProcessManager(processes, self._log)
@@ -63,7 +64,7 @@ class Application(tk.Tk):
 
     def _log(self, text):
         text_line = text if text.endswith("\n") else text + "\n"
-        self.log_box.insert('1.0', text_line)
+        self.log_box.insert("1.0", text_line)
 
     def _play_visualization(self):
         self._log("Playing visualization")

@@ -6,6 +6,7 @@ from threading import Thread
 # updates per second
 UPS = 60
 
+
 class ProcessManager:
     def __init__(self, processes, logging_function=print):
         self.processes = processes
@@ -27,7 +28,7 @@ class FCFSProcessManager(ProcessManager):
         super().__init__(processes, *args)
         self.process_queue = None
         self.start_time = None
-        self.sorted_processes = sorted(processes, key=attrgetter('arrives_at'))
+        self.sorted_processes = sorted(processes, key=attrgetter("arrives_at"))
         self.management_thread = None
 
     def start(self):
@@ -61,7 +62,9 @@ class FCFSProcessManager(ProcessManager):
 
     def _update(self):
         if self.start_time is None or self.process_queue is None:
-            raise Exception("Cannot update() a ProcessManager that has not been started.")
+            raise Exception(
+                "Cannot update() a ProcessManager that has not been started."
+            )
 
         current_time = time.time()
         ellapsed_time = current_time - self.start_time
@@ -70,12 +73,21 @@ class FCFSProcessManager(ProcessManager):
         if current_process.started_running_at is None:
             if current_process.arrives_at <= ellapsed_time:
                 current_process.start()
-                self.log("Starting process %s after %d seconds"
-                        % (current_process.id, current_process.started_running_at - self.start_time))
+                self.log(
+                    "Starting process %s after %d seconds"
+                    % (
+                        current_process.id,
+                        current_process.started_running_at - self.start_time,
+                    )
+                )
         elif current_process.get_progress() >= 1.0:
             self.process_queue.get()
-            self.log("Process %s finished at %d seconds,"
-                    " after running for %d seconds"
-                    % (current_process.id,
-                        ellapsed_time,
-                        current_time - current_process.started_running_at))
+            self.log(
+                "Process %s finished at %d seconds,"
+                " after running for %d seconds"
+                % (
+                    current_process.id,
+                    ellapsed_time,
+                    current_time - current_process.started_running_at,
+                )
+            )
