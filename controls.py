@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class Controls(ttk.Frame):
     """
     Shows three control buttons, like so:
@@ -8,6 +9,7 @@ class Controls(ttk.Frame):
     │   Play   │   Stop   │   Quit   │
     └──────────┴──────────┴──────────┘
     """
+
     def __init__(self, play_handler, stop_handler, quit_handler, **kwargs):
         super().__init__(**kwargs)
         self.create_widgets(play_handler, stop_handler, quit_handler)

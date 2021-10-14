@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from canvas import Canvas
 from controls import Controls
+from process_manager import FCFSProcessManager
 
 BACKGROUND_COLOR = "#03000F"
 
@@ -10,15 +11,17 @@ BUTTON_BACKGROUND_MAP = [("active", "#0A0A0F"), ("pressed", "#13101F")]
 BUTTON_BACKGROUND = "#03000F"
 BUTTON_FOREGROUND = "#F0F0FF"
 
+
 class Application(tk.Tk):
     """
     Controls how processes are managed and displays them in a tkinter canvas
     """
     def __init__(self, processes=[], **kwargs):
         super().__init__(**kwargs)
-        self.processes = processes
+        self.process_manager = FCFSProcessManager(processes, self._log)
+
         self.canvas = Canvas(
-            processes=self.processes,
+            processes=self.process_manager.processes,
             master=self,
             relief=tk.FLAT,
         )
@@ -30,11 +33,11 @@ class Application(tk.Tk):
         )
         self.log_box_container = tk.Frame(self)
         self.log_box = tk.Text(
-                master=self.log_box_container,
-                relief=tk.FLAT,
-                height=5, # lines
-                foreground="#FFFFFF",
-                )
+            master=self.log_box_container,
+            relief=tk.FLAT,
+            height=5,  # lines
+            foreground="#FFFFFF",
+        )
         self.log_box["bg"] = BACKGROUND_COLOR
         self._create_widgets()
         self._init_styles()
@@ -60,23 +63,28 @@ class Application(tk.Tk):
 
     def _log(self, text):
         text_line = text if text.endswith("\n") else text + "\n"
-        self.log_box.insert(tk.INSERT, text_line)
+        self.log_box.insert('1.0', text_line)
 
     def _play_visualization(self):
         self._log("Playing visualization")
         self.canvas.play()
+        self.process_manager.start()
 
     def _stop_visualization(self):
         self._log("Stopping visualization")
-
-        for process in self.processes:
-            process.reset()
-
         self.canvas.pause()
+        try:
+            self.process_manager.stop()
+        except:
+            self._log("Cannot stop a visualization that has not started")
 
     def _quit_visualization(self):
         self._log("Quitting visualization")
         self.canvas.pause()
+        try:
+            self.process_manager.stop()
+        except:
+            pass
         self.quit()
 
     def _create_canvas(self):
