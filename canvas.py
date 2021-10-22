@@ -4,11 +4,11 @@ A Canvas is where processes are drawn/displayed
 
 import tkinter as tk
 
-FPS = 30
+FPS = 60
 GAP = 16
-ACTIVE_PROCESS_FILL = "#2faf7d"
-COMPLETED_PROCESS_FILL = "#2fdf9d"
-INACTIVE_PROCESS_FILL = "#071610"
+ACTIVE_PROCESS_FILL = "#23afed"
+COMPLETED_PROCESS_FILL = "#0faf1d"
+INACTIVE_PROCESS_FILL = "#171310"
 
 
 class Canvas(tk.Canvas):
@@ -71,7 +71,7 @@ class Canvas(tk.Canvas):
                     if process_progress >= 1.0
                     else (
                         ACTIVE_PROCESS_FILL
-                        if process.get_progress() > 0
+                        if process.is_active
                         else INACTIVE_PROCESS_FILL
                     )
                 ),

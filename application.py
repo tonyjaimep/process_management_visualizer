@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from canvas import Canvas
 from controls import Controls
-from process_manager import FCFSProcessManager
+from process_managers import RoundRobinProcessManager
 
 BACKGROUND_COLOR = "#03000F"
 
@@ -19,7 +19,7 @@ class Application(tk.Tk):
 
     def __init__(self, processes=[], **kwargs):
         super().__init__(**kwargs)
-        self.process_manager = FCFSProcessManager(processes, self._log)
+        self.process_manager = RoundRobinProcessManager(processes, self._log)
 
         self.canvas = Canvas(
             processes=self.process_manager.processes,

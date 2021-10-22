@@ -3,25 +3,10 @@ from queue import Queue
 from operator import attrgetter
 from threading import Thread
 
+from process_managers.process_manager import ProcessManager
+
 # updates per second
 UPS = 60
-
-
-class ProcessManager:
-    def __init__(self, processes, logging_function=print):
-        self.processes = processes
-        self.log = logging_function
-
-    def start(self):
-        pass
-
-    def _update(self):
-        pass
-
-    def stop(self):
-        for process in self.processes:
-            process.reset()
-
 
 class FCFSProcessManager(ProcessManager):
     def __init__(self, processes, *args):
@@ -66,18 +51,21 @@ class FCFSProcessManager(ProcessManager):
                 "Cannot update() a ProcessManager that has not been started."
             )
 
+        if len(self.process_queue.queue) is 0:
+            return
+
         current_time = time.time()
         ellapsed_time = current_time - self.start_time
         current_process = self.process_queue.queue[0]
 
-        if current_process.started_running_at is None:
+        if not current_process.is_active:
             if current_process.arrives_at <= ellapsed_time:
                 current_process.start()
                 self.log(
                     "Starting process %s after %d seconds"
                     % (
                         current_process.id,
-                        current_process.started_running_at - self.start_time,
+                        current_time - self.start_time,
                     )
                 )
         elif current_process.get_progress() >= 1.0:
@@ -88,6 +76,6 @@ class FCFSProcessManager(ProcessManager):
                 % (
                     current_process.id,
                     ellapsed_time,
-                    current_time - current_process.started_running_at,
+                    current_process.time_dedicated_to_self,
                 )
             )
