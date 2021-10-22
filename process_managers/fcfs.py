@@ -8,6 +8,7 @@ from process_managers.process_manager import ProcessManager
 # updates per second
 UPS = 60
 
+
 class FCFSProcessManager(ProcessManager):
     def __init__(self, processes, *args):
         super().__init__(processes, *args)

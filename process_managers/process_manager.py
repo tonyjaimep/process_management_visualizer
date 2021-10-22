@@ -1,5 +1,3 @@
-
-
 class ProcessManager:
     def __init__(self, processes, logging_function=print):
         self.processes = processes
